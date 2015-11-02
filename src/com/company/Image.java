@@ -9,24 +9,21 @@ import java.io.IOException;
 
 public class Image {
 
-    int pixelMatrix[][];
+    private int pixelMatrix[][];
     private int length, width;
     BufferedImage image;
 
     Image(String filePath) throws IOException {
 
-        File file = new File(filePath);// file object to get the file, the second argument is the name of the image file
+        File file = new File(filePath);
         image = ImageIO.read(file);
         Raster image_raster = image.getData();
 
-        //get pixel by pixel
         int[] pixel = new int[1];
         int[] buffer = new int[1];
 
-        // declaring the size of arrays
         pixelMatrix = new int[image_raster.getWidth()][image_raster.getHeight()];
 
-        //get the image in the array
         for (int i = 0; i < image_raster.getWidth(); i++)
             for (int j = 0; j < image_raster.getHeight(); j++) {
                 pixel = image_raster.getPixel(i, j, buffer);
@@ -50,6 +47,16 @@ public class Image {
 
     public void setPixelAt(int x, int y, int newPixelValue) {
         pixelMatrix[x][y] = newPixelValue;
+    }
+
+    public void setLSBPixelAt(int x, int y, char newPixelValue) {
+        if (newPixelValue == '0' || newPixelValue == '1') {
+            pixelMatrix[x][y] = Binary.setLSBValue(pixelMatrix[x][y],newPixelValue);
+        }
+    }
+
+    public char getLSBPixelAt(int x, int y){
+        return Binary.getLSBValue(pixelMatrix[x][y]);
     }
 
     public void writeAsImageToFile(String filePath) throws IOException {
