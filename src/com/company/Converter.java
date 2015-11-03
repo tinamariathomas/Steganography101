@@ -5,7 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class Converter {
-    static public String convertUTFStringToBinary(String text) {
+    static public String textToBinaryString(String text) {
         Charset charSet = StandardCharsets.US_ASCII;
         byte[] bytes = text.getBytes(charSet);
         StringBuffer binary = new StringBuffer();
@@ -18,7 +18,7 @@ public class Converter {
         return binary.toString();
     }
 
-    static public String convertBinarytoString(String binaryString) {
+    static public String binaryStringToText(String binaryString) {
 
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < binaryString.length()/8; i++) {

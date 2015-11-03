@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Image {
 
     private int pixelMatrix[][];
-    private int length, width;
+    private int height, width;
     BufferedImage image;
 
     Image(String filePath) throws IOException {
@@ -29,12 +29,12 @@ public class Image {
                 pixel = image_raster.getPixel(i, j, buffer);
                 pixelMatrix[i][j] = pixel[0];
             }
-        length = pixelMatrix.length;
+        height = pixelMatrix.length;
         width = pixelMatrix[0].length;
     }
 
-    public int getLength() {
-        return length;
+    public int getHeight() {
+        return height;
     }
 
     public int getWidth() {
@@ -51,32 +51,32 @@ public class Image {
 
     public void setLSBPixelAt(int x, int y, char newPixelValue) {
         if (newPixelValue == '0' || newPixelValue == '1') {
-            pixelMatrix[x][y] = Binary.setLSBValue(pixelMatrix[x][y],newPixelValue);
+            pixelMatrix[x][y] = Binary.setLSBValue(pixelMatrix[x][y], newPixelValue);
         }
     }
 
-    public char getLSBPixelAt(int x, int y){
+    public char getLSBPixelAt(int x, int y) {
         return Binary.getLSBValue(pixelMatrix[x][y]);
     }
 
     public void writeAsImageToFile(String filePath) throws IOException {
 
-        int pixelMatrixFlattened[] = new int[getLength() * getWidth()];
+        int pixelMatrixFlattened[] = new int[getHeight() * getWidth()];
 
         int k = 0;
 
         for (int i = 0; i < getWidth(); i++) {
-            for (int j = 0; j < getLength(); j++) {
+            for (int j = 0; j < getHeight(); j++) {
                 pixelMatrixFlattened[k++] = pixelMatrix[j][i];
             }
         }
 
-        BufferedImage pixelImage = new BufferedImage(length, width, BufferedImage.TYPE_BYTE_GRAY);
+        BufferedImage pixelImage = new BufferedImage(height, width, BufferedImage.TYPE_BYTE_GRAY);
 
-        WritableRaster raster = (WritableRaster) image.getData();
-        raster.setPixels(0, 0, length, width, pixelMatrixFlattened);
+        WritableRaster raster = (WritableRaster) pixelImage.getData();
+        raster.setPixels(0, 0, height, width, pixelMatrixFlattened);
         pixelImage.setData(raster);
 
-        ImageIO.write(pixelImage, "jpg", new File(filePath));
+        ImageIO.write(pixelImage, "png", new File(filePath));
     }
 }
